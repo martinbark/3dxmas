@@ -1,0 +1,29 @@
+{
+  "name": "3dxmas",
+  "version": "1.0.0",
+  "description": "Raspberry Pi 3D Xmas Tree",
+  "author": "Martin Bark <martin@barkynet.com>",
+  "repository": "https://github.com/martinbark/3dxmas.git",
+  "license": "MIT",
+  "main": "./3dxmas",
+  "bin": {
+    "3dxmas": "./3dxmas"
+  },
+  "scripts": {
+    "pkg": "node-deb --no-rebuild -- 3dxmas lib",
+    "start": "./3dxmas"
+  },
+  "node_deb": {
+    "init": "systemd",
+    "entrypoints": {
+      "daemon": "3dxmas"
+    }
+  },
+  "dependencies": {
+    "async": "^2.6.0",
+    "rpi-gpio": "^0.9.1"
+  },
+  "devDependencies": {
+    "node-deb": "^0.10.1"
+  }
+}
