@@ -9,7 +9,8 @@
 The deb package is built for Raspbian.  To install download the latest deb package on the Raspberry Pi and install
 
 ```
-sudo apt-get install nodejs node-legacy
+curl -sL https://deb.nodesource.com/setup_10.x | sudo -E bash -
+sudo apt-get install -y nodejs
 sudo dpkg -i 3dxmas*.deb
 ```
 
@@ -19,14 +20,17 @@ sudo dpkg -i 3dxmas*.deb
 sudo dpkg --remove 3dxmas
 ```
 
-## Building From Source
+## Building
+
+Install [docker](https://docs.docker.com/install/) and [docker-compose](https://docs.docker.com/compose/install/) then run
 
 ```
 git clone https://github.com/martinbark/3dxmas.git
 cd 3dxmas
-npm install
-./3dxmas
+./dockerbuild
 ```
+
+This will build the .deb file using a raspbian based Docker container.
 
 ## License
 

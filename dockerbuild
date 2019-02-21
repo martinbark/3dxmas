@@ -1,0 +1,27 @@
+#!/bin/bash -e
+
+DC="docker-compose -f docker-compose.builder.yml"
+
+function finish() {
+  # down and remove volumes
+  $DC down --volumes
+}
+
+# Download qemu-arm-static
+QEMU_ARM_STATIC_VER=v3.1.0-2
+QEMU_ARM_STATIC_SHA256=c8e686f3492a1f1d92c54f43b2452dff2a20f3b4df393eb6f63900f817000230
+if ! echo "${QEMU_ARM_STATIC_SHA256}  qemu-arm-static" | sha256sum --check - >/dev/null 2>&1 ; then
+  wget -c https://github.com/multiarch/qemu-user-static/releases/download/${QEMU_ARM_STATIC_VER}/qemu-arm-static -O qemu-arm-static.tmp
+  chmod a+x qemu-arm-static.tmp
+  mv qemu-arm-static.tmp qemu-arm-static
+fi
+
+rm -f *.deb
+$DC build
+
+trap finish EXIT
+$DC run --rm builder $@
+
+if [ $# -eq 0 ] ; then
+ $DC run --rm -T builder bash -c '(cd /app && tar cf - *.deb)' | tar xf -
+fi

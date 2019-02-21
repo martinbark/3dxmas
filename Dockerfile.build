@@ -1,0 +1,22 @@
+FROM schachr/raspbian-stretch
+COPY qemu-arm-static /usr/bin
+
+RUN apt-get update && apt-get install -y \
+		curl \
+		fakeroot \
+		g++ \
+		make \
+		jq \
+	&& rm -rf /var/lib/apt/lists/*
+
+# Install nodejs
+RUN curl -sL https://deb.nodesource.com/setup_10.x | bash - &&\
+	apt-get update && apt-get install -y \
+		nodejs \
+	&& rm -rf /var/lib/apt/lists/*
+
+WORKDIR /app
+COPY package.json package-lock.json /app/
+RUN npm install
+COPY . /app
+CMD ["npm", "run", "pkg"]
