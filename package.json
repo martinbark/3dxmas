@@ -1,6 +1,6 @@
 {
   "name": "3dxmas",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Raspberry Pi 3D Xmas Tree",
   "author": "Martin Bark <martin@barkynet.com>",
   "repository": "https://github.com/martinbark/3dxmas.git",
@@ -20,10 +20,10 @@
     }
   },
   "dependencies": {
-    "async": "^2.6.0",
-    "rpi-gpio": "^0.9.1"
+    "async": "^2.6.2",
+    "rpi-gpio": "^2.1.3"
   },
   "devDependencies": {
-    "node-deb": "^0.10.1"
+    "node-deb": "^0.10.7"
   }
 }
