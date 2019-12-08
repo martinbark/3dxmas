@@ -1,18 +1,37 @@
-FROM schachr/raspbian-stretch
-COPY qemu-arm-static /usr/bin
+FROM debian:buster as builder
+
+RUN apt-get update && apt-get install -y \
+		wget \
+		xz-utils \
+	&& rm -rf /var/lib/apt/lists/*
+
+# Download and extract raspbian rootfs
+ENV RASPBIAN_SHA256 e9a9acdfffa315df4fac1541ebfa07c555f79ccfe87d6d3d86e63b53f2edb374
+ENV DOWNLOAD_URL https://downloads.raspberrypi.org/raspbian_lite/root.tar.xz
+WORKDIR /raspbian
+RUN wget ${DOWNLOAD_URL} -O /tmp/root.tar.xz &&\
+    echo "${RASPBIAN_SHA256}  /tmp/root.tar.xz" | sha256sum --check - &&\
+    tar xf /tmp/root.tar.xz -C /raspbian &&\
+    rm /tmp/root.tar.xz
+
+# Add qemu-arm-static
+ENV QEMU_ARM_STATIC_VER v4.1.1-1
+ENV QEMU_ARM_STATIC_SHA256 d0cadffa192353f9a9e4d0414a4bf7b65fc38fc22e40f2d4e7a9620fd9f3f8ac
+RUN wget -c https://github.com/multiarch/qemu-user-static/releases/download/${QEMU_ARM_STATIC_VER}/qemu-arm-static -O /usr/bin/qemu-arm-static &&\
+		echo "${QEMU_ARM_STATIC_SHA256}  /usr/bin/qemu-arm-static" | sha256sum --check -
+
+FROM scratch
+COPY --from=builder /raspbian /
+ENV DEBIAN_FRONTEND noninteractive
 
 RUN apt-get update && apt-get install -y \
 		curl \
 		fakeroot \
 		g++ \
 		make \
-		jq \
-	&& rm -rf /var/lib/apt/lists/*
-
-# Install nodejs
-RUN curl -sL https://deb.nodesource.com/setup_10.x | bash - &&\
-	apt-get update && apt-get install -y \
 		nodejs \
+		npm \
+		jq \
 	&& rm -rf /var/lib/apt/lists/*
 
 WORKDIR /app

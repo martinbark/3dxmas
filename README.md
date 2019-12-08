@@ -9,7 +9,7 @@
 The deb package is built for Raspbian.  To install download the latest deb package on the Raspberry Pi and install
 
 ```
-curl -sL https://deb.nodesource.com/setup_10.x | sudo -E bash -
+sudo apt-get update
 sudo apt-get install -y nodejs
 sudo dpkg -i 3dxmas*.deb
 ```
