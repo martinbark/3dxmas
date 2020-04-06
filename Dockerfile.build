@@ -6,7 +6,8 @@ RUN apt-get update && apt-get install -y \
 	&& rm -rf /var/lib/apt/lists/*
 
 # Download and extract raspbian rootfs
-ENV RASPBIAN_SHA256 e9a9acdfffa315df4fac1541ebfa07c555f79ccfe87d6d3d86e63b53f2edb374
+# sha256 from http://downloads.raspberrypi.org/raspbian_lite/partitions.json
+ENV RASPBIAN_SHA256 bb0892d4a028ae9d282849d05adf851fe54173013f6331e74a4bdd07e4af8dab
 ENV DOWNLOAD_URL https://downloads.raspberrypi.org/raspbian_lite/root.tar.xz
 WORKDIR /raspbian
 RUN wget ${DOWNLOAD_URL} -O /tmp/root.tar.xz &&\
@@ -15,8 +16,8 @@ RUN wget ${DOWNLOAD_URL} -O /tmp/root.tar.xz &&\
     rm /tmp/root.tar.xz
 
 # Add qemu-arm-static
-ENV QEMU_ARM_STATIC_VER v4.1.1-1
-ENV QEMU_ARM_STATIC_SHA256 d0cadffa192353f9a9e4d0414a4bf7b65fc38fc22e40f2d4e7a9620fd9f3f8ac
+ENV QEMU_ARM_STATIC_VER v4.2.0-6
+ENV QEMU_ARM_STATIC_SHA256 739dbf880317053b72fecaf41ca83aa2f5fccb9ddf2306b3ad2fd23d15a2576c
 RUN wget -c https://github.com/multiarch/qemu-user-static/releases/download/${QEMU_ARM_STATIC_VER}/qemu-arm-static -O /usr/bin/qemu-arm-static &&\
 		echo "${QEMU_ARM_STATIC_SHA256}  /usr/bin/qemu-arm-static" | sha256sum --check -
 
